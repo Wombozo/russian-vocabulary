@@ -42,7 +42,7 @@ while true; do
     line=$(shuf -n 1 "/tmp/dic")
     fr=$(echo $line|cut -d " " -f1)
     ru=$(echo $line|cut -d " " -f2)
-    echo -e "${BLUE}$fr\c"
+    echo -e "${BLUE}$fr${NC}\c"
     read n
     echo -e "${GREEN}$ru${NC}\n"
 done
