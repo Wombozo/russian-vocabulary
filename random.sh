@@ -19,9 +19,9 @@ function help()
     echo -e "Usage : $0 filename [first lines]\n\nExamples: \n\t$0 ./dictionnary1\n\t$0 ./dictionnary1 5\n"
 }
 
-trap ctrl_c INT
+trap clear_exit INT
 
-function ctrl_c()
+function clear_exit()
 {
     clear
     exit 0
@@ -61,16 +61,49 @@ fi
 # Listing words
 for (( i=1; i<=$nb; i++)); do
     line=$(sed "${i}q;d" ${filename} | cut -d " " -f1)
-    echo -e ${ORANGE}$line${NC}
+    echo -e "${ORANGE}$i) $line${NC}"
 done
 
 echo -e "\n${PURPLE}========================================================${NC}\n"
 
+# Translating
+function translate()
+{
+    again="true"
+    echo -n -e "\033[1A\033[0K"
+    while [ "$again" == "true" ]; do
+        echo -n -e "\033[0K"
+        echo -n -e "${BLUE}Which word do you want to translate ? (pick a number) : ${NC}"
+        read -p "" number
+        re='^[0-9]+$'
+        if ! [[ $number =~ $re ]]; then
+            echo -n -e "$number is not a number...\n"
+        elif [ $number -gt $nb ] || [ $number -lt "1" ]; then
+            echo -n -e "$number is not in range (1 to $nb)...\n"
+        else
+            fr=$(sed "${number}q;d" ${filename} | cut -d " " -f1)
+            ru=$(sed "${number}q;d" ${filename} | cut -d " " -f2)
+            echo -n -e "${number}) ${ORANGE}$fr${NC} is ${RED}$ru${NC}\n"
+        fi
+        echo -n -e "${GREEN}Again ? [Y/n] : ${NC}"
+        read -p "" res
+        case "$res" in
+            [nN])
+                again="false"
+                ;;
+            *)
+                ;;
+        esac
+        echo -e "\033[1A\033[0K\033[1A\033[0K\033[1A\033[0K\033[1A"
+    done
+}
+
 # Continue ?
-read -r -p "$(echo -e ${RED}Continue with these words ? [Y/n] :${NC}) " response
+read -r -p "$(echo -e ${RED}Randomly ask words or translate ? [R/t] :${NC}) " response
 case "$response" in
-    [nN])
-        exit 0
+    [tT])
+        translate
+        clear_exit
         ;;
     *)
         ;;
@@ -90,7 +123,6 @@ while true; do
     read n
     echo -e -n "${GREEN}=> $ru${NC}"
     read n
-#    if [ "n" -eq ^[-]]
     echo -e "\033[1A\033[0K\033[2A"
 done
 
