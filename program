@@ -59,6 +59,7 @@ if [ "$#" == "2" ]; then
 fi
 
 # Listing words
+echo -e "${PURPLE}\e[4mFile : $filename${NC}\e[0m\n"
 for (( i=1; i<=$nb; i++)); do
     line=$(sed "${i}q;d" ${filename} | cut -d " " -f1)
     echo -e "${ORANGE}$i) $line${NC}"
@@ -150,7 +151,6 @@ function order()
     done
 }
 
-# Continue ?
 read -r -p "$(echo -e ${RED}Randomly ask words, words in order or translate ? [R/o/t] :${NC}) " response
 case "$response" in
     [tT])
