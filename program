@@ -98,31 +98,71 @@ function translate()
     done
 }
 
+# Show words
+function echo_instructions_showing()
+{
+    echo -e "\nPress enter after every words to check, CTRL + C to exit !\n"
+    echo -e -n "\n\n\n\n\n${PURPLE}========================================================${NC}"
+    echo -e -n "\033[4A \r"
+}
+
+function random()
+{
+    echo_instructions_showing
+    # Asking words
+    while true; do
+        head -n $nb $filename>/tmp/dic
+        line=$(shuf -n 1 "/tmp/dic")
+        fr=$(echo $line|cut -d " " -f1)
+        ru=$(echo $line|cut -d " " -f2)
+        echo -e -n "\033[0K${BLUE}$fr${NC} "
+        read n
+        echo -e -n "${GREEN}=> $ru${NC}"
+        read n
+        echo -e "\033[1A\033[0K\033[2A"
+    done
+}
+
+function order()
+{
+    again="true"
+    echo_instructions_showing
+    while [ "$again" == "true" ]; do
+        for ((i=1; i<=$nb;i++)); do
+            fr=$(sed "${i}q;d" ${filename} | cut -d " " -f1)
+            ru=$(sed "${i}q;d" ${filename} | cut -d " " -f2)
+            echo -e -n "\033[0K${BLUE}$fr${NC} "
+            read n
+            echo -e -n "${GREEN}=> $ru${NC}"
+            read n
+            echo -e "\033[1A\033[0K\033[2A"
+        done
+        echo -n -e "${GREEN}Again ? [Y/n] : ${NC}"
+        read -p "" res
+        case "$res" in
+            [nN])
+                again="false"
+                ;;
+            *)
+                ;;
+        esac
+        echo -e "\033[1A\033[0K\033[1A"
+    done
+}
+
 # Continue ?
-read -r -p "$(echo -e ${RED}Randomly ask words or translate ? [R/t] :${NC}) " response
+read -r -p "$(echo -e ${RED}Randomly ask words, words in order or translate ? [R/o/t] :${NC}) " response
 case "$response" in
     [tT])
         translate
         clear_exit
         ;;
+    [oO])
+        order
+        ;;
     *)
+        random
         ;;
 esac
 
-echo -e "\nPress enter after every words to check, CTRL + C to exit !\n"
-echo -e -n "\n\n\n\n\n${PURPLE}========================================================${NC}"
-echo -e -n "\033[4A \r"
-
-# Asking words
-while true; do
-    head -n $nb $filename>/tmp/dic
-    line=$(shuf -n 1 "/tmp/dic")
-    fr=$(echo $line|cut -d " " -f1)
-    ru=$(echo $line|cut -d " " -f2)
-    echo -e -n "\033[0K${BLUE}$fr${NC} "
-    read n
-    echo -e -n "${GREEN}=> $ru${NC}"
-    read n
-    echo -e "\033[1A\033[0K\033[2A"
-done
 
