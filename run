@@ -161,6 +161,7 @@ case "$response" in
         ;;
     [oO])
         order
+        clear_exit
         ;;
     *)
         random
