@@ -18,7 +18,7 @@ echo -e "${PURPLE}=============================================${NC}\n"
 
 function help()
 {
-    echo -e "Usage : $0 dictionnary-number [first lines]\n\nExamples: \n\t$0 3\n\t$0 2 5\n"
+    echo -e "Usage : \"$0 dictionnary-number [first lines]\" or \"$0 all\"\n\nExamples: \n\t$0 3\n\t$0 2 5\n"
 }
 
 trap clear_exit INT
@@ -33,6 +33,15 @@ function clear_exit()
 if [ "$#" != "1" ] && [ "$#" != "2" ]; then
     help
     exit 1
+fi
+
+if [ "$1" == "all" ]; then
+    for i in `ls -1 ${DIC_DIR}`; do
+        echo -e "${RED}$i${NC}"
+        cat ${DIC_DIR}$i
+        echo ""
+    done
+    exit 0
 fi
 
 # Existence of dictionnary
