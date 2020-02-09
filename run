@@ -162,18 +162,18 @@ function order()
     done
 }
 
-read -r -p "$(echo -e ${RED}Randomly ask words, words in order or translate ? [R/o/t] :${NC}) " response
+read -r -p "$(echo -e ${RED}Randomly ask words, words in order or translate ? [O/r/t] :${NC}) " response
 case "$response" in
     [tT])
         translate
         clear_exit
         ;;
-    [oO])
-        order
-        clear_exit
+    [rR])
+        random
         ;;
     *)
-        random
+        order
+        clear_exit
         ;;
 esac
 
