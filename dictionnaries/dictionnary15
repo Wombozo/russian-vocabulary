@@ -2,6 +2,9 @@ meteo погОда
 pluie дождь(m.)
 soleil сОлнце
 ciel нЕбо
+nuage Облако
+bleu-clair голубОй
+gris сеный
 il-y-a-du-vent вЕтрено
 il-fait-froid хОлодно
 il-fait-tiède теплО
